@@ -1,0 +1,193 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    */
+    .table-fixed tbody {
+        height: 300px;
+        overflow-y: auto;
+        width: 100%;
+    }
+
+    .table-fixed thead,
+    .table-fixed tbody,
+    .table-fixed tr,
+    .table-fixed td,
+    .table-fixed th {
+        display: block;
+    }
+
+        .table-fixed tbody td,
+        .table-fixed tbody th,
+        .table-fixed thead > tr > th {
+            float: left;
+            position: relative;
+            &::after
+
+    {
+        content: '';
+        clear: both;
+        display: block;
+    }
+
+    }
+
+    /*
+    *
+    * ==========================================
+    * FOR DEMO PURPOSES
+    * ==========================================
+    *
+    */
+
+    body {
+        background: #74ebd5;
+        background: -webkit-linear-gradient(to right, #74ebd5, #ACB6E5);
+        background: linear-gradient(to right, #74ebd5, #ACB6E5);
+        min-height: 100vh;
+    }
+</style>
+<script>
+
+    var connection = new signalR.HubConnectionBuilder().withUrl("/PersonaHub").build();
+
+    connection.start().then(function () {
+        console.log("Conectado!!!");
+    });
+
+    connection.on("Recibir", products => {
+        console.log(products);
+        InsertTablaA(products);
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/Home/GetPersonas",
+        //    success: function (e)
+        //    {
+        //        document.getElementById("nombre").innerHTML = "";
+        //        console.log(e);
+        //        console.log(e[0])
+        //        for (var i = 0; i < e.length; i++)
+        //        {
+        //            var newDiv = document.createElement("div");
+        //            var newContent = document.createTextNode(e[i].nombre);
+        //            newDiv.appendChild(newContent);
+        //            document.getElementById("nombre").appendChild(newDiv);
+        //        }
+
+        //    },
+        //});
+    });
+    connection.on("RecibirInsert", products => {
+        console.log(products);
+
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/Home/GetPersonas",
+        //    success: function (e)
+        //    {
+        //        document.getElementById("nombre").innerHTML = "";
+        //        console.log(e);
+        //        console.log(e[0])
+        //        for (var i = 0; i < e.length; i++)
+        //        {
+        //            var newDiv = document.createElement("div");
+        //            var newContent = document.createTextNode(e[i].nombre);
+        //            newDiv.appendChild(newContent);
+        //            document.getElementById("nombre").appendChild(newDiv);
+        //        }
+
+        //    },
+        //});
+    });
+
+    function test() {
+        connection.invoke("Notificar");
+    }
+
+
+    function InsertTablaA(Titular) {
+        var rows = contarRows();
+        console.log(rows);
+        if (rows >=5)
+        {
+            document.getElementsByTagName("tr")[5].remove();
+            
+        }
+        var table = document.getElementById("tabla");
+        var row = table.insertRow(0);
+
+
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+
+        cell1.id = ("TDNombre");
+        cell1.innerHTML = Titular.fecha;
+
+        cell2.id = ("TDNombre");
+        cell2.innerHTML = Titular.id;
+
+      
+        cell3.id = ("TDNombre");
+        cell3.innerHTML = Titular.nombre;
+
+     
+        cell4.id = ("TDNombre");
+        cell4.innerHTML = Titular.apellido;
+
+        cell1.className = "col-3";
+        cell2.className = "col-3";
+        cell3.className = "col-3";
+        cell4.className = "col-3";
+    }
+
+    function contarRows()
+    {
+        var table = document.getElementById("tablacontar");
+        var tbodyRowCount = table.tBodies[0].rows.length;
+        return tbodyRowCount;
+    }
+</script>
+<div class="text-center">
+
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-7 mx-auto bg-white rounded shadow">
+
+                <!-- Fixed header table-->
+               
+                    <table class="@*table table-hover table-fixed*@" id="tablacontar">
+                        <thead>
+                            <tr>
+                                <th  class="col-3">Fecha
+                                </th>
+                                <th class="col-3">
+                                    Id
+                                </th>
+                                <th class="col-3">
+                                    Nombre
+                                </th>
+                                <th class="col-3">
+                                    Apellido
+                                </th>
+                            </tr>
+
+                        </thead>
+                        <tbody id="tabla">
+
+                            
+
+
+                        </tbody>
+                    </table>
+              
+
+            </div>
+        </div>
+    </div>
+</div>
+<button class="btn-dark" onclick="test()">Test</button>
+
+
